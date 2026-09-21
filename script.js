@@ -202,6 +202,7 @@ function buildPlaceholderCard(text) {
 function initGallery() {
   const grid = document.getElementById('gallery-grid');
   if (!grid) return;
+  grid.innerHTML = '';
   const solved = getSolvedMoments();
 
   MOMENTS.forEach((moment, index) => {
@@ -321,5 +322,19 @@ modalOverlay.addEventListener('click', (event) => {
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !modalOverlay.hidden) closeModal();
 });
+
+// DEV ONLY — remove this button (and this listener) once we're done testing.
+const devResetBtn = document.getElementById('dev-reset-btn');
+if (devResetBtn) {
+  devResetBtn.addEventListener('click', () => {
+    try {
+      localStorage.removeItem('mysterySolved');
+    } catch (e) {
+      // ignore
+    }
+    closeModal();
+    initGallery();
+  });
+}
 
 initGallery();
