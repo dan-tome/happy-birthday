@@ -95,6 +95,7 @@ setInterval(() => {
 const TAB_UNLOCKS = {
   letter: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 0, 0, 0),
   reasons: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 9, 0, 0),
+  present: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 11, 0, 0),
   moments: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 14, 0, 0),
 };
 
@@ -118,6 +119,7 @@ function formatUnlockTimeShort(date) {
 const TAB_LABELS = {
   letter: { emoji: '💌', name: 'Letter' },
   reasons: { emoji: '💗', name: 'Reasons' },
+  present: { emoji: '🎁', name: 'Present' },
   moments: { emoji: '📸', name: 'Moments' },
 };
 

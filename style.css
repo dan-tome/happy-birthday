@@ -267,6 +267,32 @@ main {
   margin-top: 1.5rem;
 }
 
+.present-eyebrow {
+  font-style: italic;
+  color: var(--rose);
+  font-size: 1.1rem;
+  margin-top: 0;
+}
+
+.present-subheading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--wine);
+  margin: 1.75rem 0 0.75rem;
+}
+
+.present-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.present-list li {
+  line-height: 1.5;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
