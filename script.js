@@ -175,12 +175,16 @@ const UPCOMING_MOMENTS = [];
 const BONUS_MOMENT = {
   img: 'images/chelsea-game.webp',
   alt: 'Watching the Chelsea game at the pub',
-  question: 'What was the name of the Chelsea manager at the time of this game (10th Jan 2026)?',
+  question: 'For a chance to win a £100 Sephora voucher.\n\nWe took a trip to a random pub in front of Reading station to watch a Chelsea game on the 10th Jan 2026.\n\nWhat was the name of the Chelsea manager at the time of this game?',
   options: ['Enzo Maresca', 'Xabi Alonso', 'Liam Rosenior', 'Frank Lampard'],
   answer: 2,
   correctReveal: "Congratulations, you know Daniel's team enough to deserve an extra £100 Sephora vouchers.",
   wrongReveal: 'Oh no! Oh well, at least you still have the rest of the vouchers Daniel has stupidly promised you.',
 };
+
+function isBonusUnlocked() {
+  return getSolvedMoments().size >= MOMENTS.length;
+}
 
 function getSolvedMoments() {
   try {
@@ -254,9 +258,10 @@ function setBonusResult(result) {
 }
 
 function buildBonusCard(result) {
+  const unlocked = isBonusUnlocked();
   const card = document.createElement('figure');
   card.id = 'bonus-card';
-  card.className = 'polaroid mystery-card bonus-card' + (result ? ' solved' : '');
+  card.className = 'polaroid mystery-card bonus-card' + (result ? ' solved' : '') + (unlocked ? '' : ' locked');
 
   const frame = document.createElement('div');
   frame.className = 'mystery-frame';
@@ -269,8 +274,13 @@ function buildBonusCard(result) {
   const overlay = document.createElement('button');
   overlay.type = 'button';
   overlay.className = 'mystery-overlay';
-  overlay.setAttribute('aria-label', 'Play the one-shot bonus round');
-  overlay.innerHTML = '<span class="mystery-mark">★</span><span class="mystery-label">bonus round</span>';
+  if (unlocked) {
+    overlay.setAttribute('aria-label', 'Play the one-shot bonus round');
+    overlay.innerHTML = '<span class="mystery-mark">★</span><span class="mystery-label">bonus round</span>';
+  } else {
+    overlay.setAttribute('aria-label', 'Bonus round locked until all Mystery Moments are solved');
+    overlay.innerHTML = '<span class="mystery-mark">🔒</span><span class="mystery-label">solve all 7 first</span>';
+  }
   overlay.addEventListener('click', openBonusQuiz);
   frame.appendChild(overlay);
 
@@ -281,8 +291,11 @@ function buildBonusCard(result) {
     caption.textContent = BONUS_MOMENT.correctReveal;
   } else if (result === 'wrong') {
     caption.textContent = BONUS_MOMENT.wrongReveal;
-  } else {
+  } else if (unlocked) {
     caption.textContent = 'one shot only — choose wisely';
+  } else {
+    const remaining = MOMENTS.length - getSolvedMoments().size;
+    caption.textContent = `locked — ${remaining} more moment${remaining === 1 ? '' : 's'} to unlock`;
   }
   card.appendChild(caption);
 
@@ -404,17 +417,51 @@ function revealCardInGrid(index) {
   card.classList.add('solved');
   const caption = card.querySelector('figcaption');
   if (caption) caption.textContent = MOMENTS[index].caption;
+  refreshBonusCardLock();
+}
+
+// Swaps the bonus card's locked/unlocked look in place, without touching
+// its result state — called whenever a regular moment gets solved.
+function refreshBonusCardLock() {
+  const oldCard = document.getElementById('bonus-card');
+  if (!oldCard || getBonusResult()) return; // already played, nothing to refresh
+  const newCard = buildBonusCard(null);
+  oldCard.replaceWith(newCard);
 }
 
 function openBonusQuiz() {
   const result = getBonusResult();
   if (result) {
     renderBonusResult(result);
+  } else if (!isBonusUnlocked()) {
+    renderBonusLocked();
   } else {
     renderBonusQuestion();
   }
   modalOverlay.hidden = false;
   document.body.style.overflow = 'hidden';
+}
+
+function renderBonusLocked() {
+  modalBody.innerHTML = '';
+
+  const lock = document.createElement('p');
+  lock.className = 'modal-question';
+  lock.textContent = '🔒 Locked';
+  modalBody.appendChild(lock);
+
+  const remaining = MOMENTS.length - getSolvedMoments().size;
+  const hint = document.createElement('p');
+  hint.className = 'modal-feedback';
+  hint.textContent = `Solve all 7 Mystery Moments to unlock the bonus round — ${remaining} to go.`;
+  modalBody.appendChild(hint);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'reason-btn modal-continue';
+  closeBtn.textContent = 'Close';
+  closeBtn.addEventListener('click', closeModal);
+  modalBody.appendChild(closeBtn);
 }
 
 function renderBonusQuestion() {

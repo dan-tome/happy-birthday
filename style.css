@@ -362,6 +362,7 @@ main {
   font-size: 1.4rem;
   color: var(--wine);
   margin: 0 0 1.5rem;
+  white-space: pre-line;
 }
 
 .modal-bonus-badge {
@@ -379,6 +380,16 @@ main {
 .bonus-card .mystery-mark {
   border-color: var(--gold);
   color: var(--gold);
+}
+.bonus-card.locked .mystery-mark {
+  border-color: #bbb;
+  color: #ccc;
+}
+.bonus-card.locked .mystery-overlay {
+  background: rgba(60, 60, 60, 0.45);
+}
+.bonus-card.locked .mystery-frame img {
+  filter: blur(16px) saturate(0.5) brightness(0.6);
 }
 
 .modal-options {
