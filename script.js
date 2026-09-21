@@ -110,39 +110,57 @@ const MOMENTS = [
   {
     img: 'images/valencia-dinner.webp',
     alt: 'Ninette at a lovely restaurant in Valencia',
-    caption: 'Valencia — her food showed up fashionably late, mine showed up cold and gave up',
-    question: 'Which city were we eating dinner in?',
-    options: ['Seville', 'Barcelona', 'Valencia'],
+    caption: "Valencia — I think this was the restaurant where your food never arrived and mine went cold. Did we complain?",
+    question: 'Which city were we eating dinner in this photo?',
+    options: ['Marbella', 'Barcelona', 'Valencia'],
     answer: 2,
   },
   {
     img: 'images/cliffs-of-moher.webp',
     alt: 'Us at the Cliffs of Moher, Ireland',
-    caption: 'Cliffs of Moher, Ireland',
-    question: 'Which country are these cliffs in?',
-    options: ['Scotland', 'Ireland', 'Portugal'],
+    caption: "The tour was worth it introducing the 'Tanking yous'. God bless Brian.",
+    question: 'Which are the cliffs in the background called?',
+    options: ['Cliffs of waking up at 5am for a coach-ride with loud Germans', 'Cliffs of Moher', 'White Cliffs of Dover'],
     answer: 1,
   },
   {
     img: 'images/galway-girl.webp',
     alt: 'Ninette sitting next to the Galway Girl statue in Galway',
-    caption: 'turns out Ed wrote "Galway Girl" about the wrong one',
-    question: 'Which Ed Sheeran song does this statue reference?',
-    options: ['Photograph', 'Perfect', 'Galway Girl'],
+    caption: "You're my Galway girl. Lool gaaaayyyy!",
+    question: 'What did we have at the pub just before leaving Galway?',
+    options: ['A Cocktail', 'A glass of Coke', 'A half-pint of Cider'],
     answer: 2,
   },
   {
     img: 'images/go-ape.webp',
     alt: 'Us at the Go Ape Treetop Challenge',
-    caption: '#SmashedIt the Go Ape treetop course — right after a pack of eight-year-olds lapped us',
-    question: 'What was the name of the treetop adventure course?',
-    options: ['Tree Top Trek', 'Go Ape', 'Canopy Climb'],
+    caption: "We still haven't forgiven you Naneh!",
+    // TODO: the two wrong options below are placeholders — need two real
+    // decoy names to go with "Naneh" (see chat for why).
+    question: 'What was the name of the person who subjected us to this horror?',
+    options: ['Not Naneh', 'Naneh', 'Definitely not Naneh'],
+    answer: 1,
+  },
+  {
+    img: 'images/horse-riding.webp',
+    alt: 'Ninette horseback riding on the beach',
+    caption: 'When Ajax starting slipping on the cliff, was when you realised what a great decision you made to book the horse riding.',
+    question: 'What was your horse called?',
+    options: ['Sham', 'Ajax', "I was so scared, I screamed the whole time so I don't remember"],
+    answer: 1,
+  },
+  {
+    img: 'images/old-flat-dinner.webp',
+    alt: 'Ninette having a candlelit dinner at the old flat',
+    caption: 'I miss those nights where we had to pack up the table after eating to be able to watch TV.',
+    question: 'What was the door number and postcode of my old studio?',
+    options: ['67, N9 7QF', '66, N8 7QF', '66, N8 7QE', '60, N8 7QF'],
     answer: 1,
   },
 ];
 
 // Moments without a photo yet — shown as plain placeholders, no quiz.
-const UPCOMING_MOMENTS = ['a perfect ordinary day', 'us, always'];
+const UPCOMING_MOMENTS = [];
 
 function getSolvedMoments() {
   try {
