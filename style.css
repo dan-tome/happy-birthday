@@ -94,42 +94,6 @@ h1.script {
   font-style: normal;
 }
 
-.dev-panel {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px dashed #999;
-  border-radius: 12px;
-  background: #fff3c4;
-}
-
-.dev-panel-label {
-  margin: 0 0 0.6rem;
-  font-size: 0.8rem;
-  color: #6b5a00;
-  font-style: italic;
-}
-
-.dev-panel-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.dev-panel-btn {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.85rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  border: 1px dashed #999;
-  background: #fffbe8;
-  color: #6b5a00;
-  cursor: pointer;
-}
-.dev-panel-btn:hover {
-  background: #ffe98a;
-}
-
 .hero {
   position: relative;
   z-index: 1;

@@ -87,7 +87,6 @@ setInterval(() => {
   updateCountdown();
   refreshTabLocks();
   renderLockStatus();
-  buildDevPanel();
 }, 1000);
 
 // ---- Tab locks ----
@@ -100,60 +99,9 @@ const TAB_UNLOCKS = {
   moments: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 14, 0, 0),
 };
 
-// DEV ONLY — lets a section be force-unlocked for testing, ahead of its
-// real unlock time. Remove this block (and the panel in index.html) before
-// launch. Stored separately from real unlock state so it never fakes the
-// actual schedule, only overrides the check below.
-function getDevUnlocks() {
-  try {
-    const raw = localStorage.getItem('devUnlocks');
-    return new Set(raw ? JSON.parse(raw) : []);
-  } catch (e) {
-    return new Set();
-  }
-}
-
-function setDevUnlocks(set) {
-  try {
-    localStorage.setItem('devUnlocks', JSON.stringify([...set]));
-  } catch (e) {
-    // ignore — override just won't persist across visits
-  }
-}
-
-function toggleDevUnlock(tabName) {
-  const set = getDevUnlocks();
-  if (set.has(tabName)) {
-    set.delete(tabName);
-  } else {
-    set.add(tabName);
-  }
-  setDevUnlocks(set);
-  refreshTabLocks();
-  renderLockStatus();
-  buildDevPanel();
-}
-
-function buildDevPanel() {
-  const container = document.getElementById('dev-panel-buttons');
-  if (!container) return;
-  container.innerHTML = '';
-
-  Object.keys(TAB_UNLOCKS).forEach((tab) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'dev-panel-btn';
-    const label = TAB_LABELS[tab] ? TAB_LABELS[tab].name : tab;
-    btn.textContent = (isTabUnlocked(tab) ? '🔓 ' : '🔒 ') + label;
-    btn.addEventListener('click', () => toggleDevUnlock(tab));
-    container.appendChild(btn);
-  });
-}
-
 function isTabUnlocked(tabName) {
   const unlockAt = TAB_UNLOCKS[tabName];
   if (!unlockAt) return true; // no lock configured (e.g. home) — always open
-  if (getDevUnlocks().has(tabName)) return true;
   return new Date() >= unlockAt;
 }
 
@@ -756,4 +704,3 @@ document.querySelectorAll('.tab-btn').forEach((btn) => {
 
 refreshTabLocks();
 renderLockStatus();
-buildDevPanel();
