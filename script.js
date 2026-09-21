@@ -70,16 +70,16 @@ for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 300);
 // ---- Reasons I love you ----
 // Edit this list with your own reasons!
 const REASONS = [
-  "The way you laugh at your own jokes before you finish telling them.",
-  "You make ordinary days feel like something worth remembering.",
-  "You remember the little things I mention once, weeks later.",
-  "Your hugs fix almost everything.",
-  "You're the most stubbornly kind person I know.",
-  "You make me want to be better without ever asking me to be.",
-  "The way you say my name.",
-  "You dance in the kitchen when you think no one's watching.",
+  "The way you can brighten up my day and fill me with confidence.",
+  "The comfort you give me when I'm down.",
+  "The sacrifices you make for us.",
+  "Your beautiful face when I wake up.",
+  "The way you help and drive me be a better person.",
+  "Your delicious baking and contribution to my voluptuous figure.",
+  "The way you say my name for the 50th time and I still haven't heard you, but you still don't get mad.",
+  "Your incredible singing.",
   "You believe in me even when I don't.",
-  "Every single ordinary Tuesday with you is my favorite kind of day.",
+  "The way you just are. I love you Ninette.",
 ];
 
 let remaining = [...REASONS];
