@@ -11,6 +11,17 @@
 </head>
 <body>
 
+<div class="gate-overlay" id="gate-overlay" hidden>
+  <form class="gate-card" id="gate-form" autocomplete="off">
+    <p class="gate-eyebrow">A little something for</p>
+    <h1 class="script gate-title">Ninette</h1>
+    <p class="gate-hint">This one's just for you &mdash; enter the password to come in.</p>
+    <input type="password" id="gate-password" class="gate-input" placeholder="Password" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button type="submit" class="reason-btn gate-submit">Unlock 💕</button>
+    <p class="gate-error" id="gate-error" hidden>Not quite &mdash; try again.</p>
+  </form>
+</div>
+
 <div id="hearts"></div>
 <div id="confetti"></div>
 

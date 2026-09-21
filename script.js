@@ -1,3 +1,60 @@
+// ---- Password gate ----
+// Not real security (this is a static site, the check runs in the
+// browser) — just keeps the page private from anyone who isn't given the
+// password. Once entered correctly, it's remembered on that device via
+// localStorage, so she won't be asked again on future visits.
+const GATE_PASSWORD = 'Tweety22';
+
+function isGateUnlocked() {
+  try {
+    return localStorage.getItem('gateUnlocked') === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+function unlockGate() {
+  try {
+    localStorage.setItem('gateUnlocked', 'true');
+  } catch (e) {
+    // ignore — she'll just need to re-enter it next visit on this device
+  }
+  const overlay = document.getElementById('gate-overlay');
+  if (overlay) overlay.hidden = true;
+  document.body.style.overflow = '';
+}
+
+function initGate() {
+  const overlay = document.getElementById('gate-overlay');
+  if (!overlay) return;
+
+  if (isGateUnlocked()) {
+    overlay.hidden = true;
+    return;
+  }
+
+  overlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+
+  const form = document.getElementById('gate-form');
+  const input = document.getElementById('gate-password');
+  const error = document.getElementById('gate-error');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (input.value === GATE_PASSWORD) {
+      error.hidden = true;
+      unlockGate();
+    } else {
+      error.hidden = false;
+      input.value = '';
+      input.focus();
+    }
+  });
+}
+
+initGate();
+
 // ---- Configuration ----
 // Her birthday: month/day (year is ignored, we always count to the next occurrence)
 const BIRTHDAY_MONTH = 9;  // September
