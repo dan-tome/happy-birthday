@@ -157,6 +157,14 @@ const MOMENTS = [
     options: ['67, N9 7QF', '66, N8 7QF', '66, N8 7QE', '60, N8 7QF'],
     answer: 1,
   },
+  {
+    img: 'images/winchester.webp',
+    alt: 'Us in front of the Christmas tree in Winchester',
+    caption: 'Remember the Mediterranean dish we struggled to make.',
+    question: 'What was the name of the town / city we visited in this photo?',
+    options: ['Marlow', 'Winchester', 'St Albans', 'Oxford'],
+    answer: 1,
+  },
 ];
 
 // Moments without a photo yet — shown as plain placeholders, no quiz.
