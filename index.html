@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Ninette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="hearts"></div>
+
+<header class="hero">
+  <p class="eyebrow">A little something for</p>
+  <h1 class="script">Ninette</h1>
+  <p class="subtitle">Happy Birthday, my love</p>
+
+  <div class="countdown" id="countdown">
+    <div class="time-box"><span id="days">00</span><small>days</small></div>
+    <div class="time-box"><span id="hours">00</span><small>hours</small></div>
+    <div class="time-box"><span id="minutes">00</span><small>minutes</small></div>
+    <div class="time-box"><span id="seconds">00</span><small>seconds</small></div>
+  </div>
+  <p class="countdown-caption" id="countdown-caption">until your day arrives</p>
+
+  <a href="#letter" class="scroll-cue">↓ scroll down ↓</a>
+</header>
+
+<main>
+
+  <section id="letter" class="section letter-section">
+    <h2 class="script section-title">A letter for you</h2>
+    <div class="letter-card">
+      <p>My dearest Ninette,</p>
+      <p>
+        Another year of you in the world means another year the world got a
+        little brighter. I wanted to build you something small and a little
+        silly, because you deserve to be celebrated in every way I can think
+        of &mdash; even in code.
+      </p>
+      <p>
+        <em>(This is placeholder text &mdash; open <code>index.html</code>,
+        find the <code>letter-card</code> section, and replace it with your
+        own words. It'll mean so much more coming from you.)</em>
+      </p>
+      <p>
+        Here's to another year of us. I love you more than I know how to say,
+        so I built you a website instead.
+      </p>
+      <p class="signature">Yours, always</p>
+    </div>
+  </section>
+
+  <section id="gallery" class="section gallery-section">
+    <h2 class="script section-title">Us, in pictures</h2>
+    <p class="section-hint">
+      Add your own photos to the <code>images/</code> folder and update the
+      <code>src</code> attributes below to replace these placeholders.
+    </p>
+    <div class="gallery-grid">
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>our first photo together</figcaption></figure>
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>your favorite trip</figcaption></figure>
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>that silly selfie</figcaption></figure>
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>a perfect ordinary day</figcaption></figure>
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>you, laughing</figcaption></figure>
+      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>us, always</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="reasons" class="section reasons-section">
+    <h2 class="script section-title">Reasons I love you</h2>
+    <p class="section-hint">Click the button as many times as you'd like.</p>
+
+    <div class="reason-card" id="reason-card">
+      <p id="reason-text">Press the button to reveal a reason&hellip;</p>
+    </div>
+
+    <button id="reason-btn" class="reason-btn">Give me a reason 💗</button>
+    <p class="reason-count" id="reason-count"></p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Made with love, just for you.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
