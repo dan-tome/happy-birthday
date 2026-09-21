@@ -608,21 +608,6 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !modalOverlay.hidden) closeModal();
 });
 
-// DEV ONLY — remove this button (and this listener) once we're done testing.
-const devResetBtn = document.getElementById('dev-reset-btn');
-if (devResetBtn) {
-  devResetBtn.addEventListener('click', () => {
-    try {
-      localStorage.removeItem('mysterySolved');
-      localStorage.removeItem('bonusResult');
-    } catch (e) {
-      // ignore
-    }
-    closeModal();
-    initGallery();
-  });
-}
-
 initGallery();
 
 // ---- Tab navigation ----
