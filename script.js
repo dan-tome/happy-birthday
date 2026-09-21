@@ -170,6 +170,18 @@ const MOMENTS = [
 // Moments without a photo yet — shown as plain placeholders, no quiz.
 const UPCOMING_MOMENTS = [];
 
+// The bonus round — one attempt only, real stakes. Unlike MOMENTS above,
+// there's no retry: the first answer picked is final.
+const BONUS_MOMENT = {
+  img: 'images/chelsea-game.webp',
+  alt: 'Watching the Chelsea game at the pub',
+  question: 'What was the name of the Chelsea manager at the time of this game (10th Jan 2026)?',
+  options: ['Enzo Maresca', 'Xabi Alonso', 'Liam Rosenior', 'Frank Lampard'],
+  answer: 2,
+  correctReveal: "Congratulations, you know Daniel's team enough to deserve an extra £100 Sephora vouchers.",
+  wrongReveal: 'Oh no! Oh well, at least you still have the rest of the vouchers Daniel has stupidly promised you.',
+};
+
 function getSolvedMoments() {
   try {
     const raw = localStorage.getItem('mysterySolved');
@@ -225,6 +237,58 @@ function buildPlaceholderCard(text) {
   return card;
 }
 
+function getBonusResult() {
+  try {
+    return localStorage.getItem('bonusResult'); // 'correct' | 'wrong' | null
+  } catch (e) {
+    return null;
+  }
+}
+
+function setBonusResult(result) {
+  try {
+    localStorage.setItem('bonusResult', result);
+  } catch (e) {
+    // ignore — result just won't persist across visits
+  }
+}
+
+function buildBonusCard(result) {
+  const card = document.createElement('figure');
+  card.id = 'bonus-card';
+  card.className = 'polaroid mystery-card bonus-card' + (result ? ' solved' : '');
+
+  const frame = document.createElement('div');
+  frame.className = 'mystery-frame';
+
+  const img = document.createElement('img');
+  img.src = BONUS_MOMENT.img;
+  img.alt = BONUS_MOMENT.alt;
+  frame.appendChild(img);
+
+  const overlay = document.createElement('button');
+  overlay.type = 'button';
+  overlay.className = 'mystery-overlay';
+  overlay.setAttribute('aria-label', 'Play the one-shot bonus round');
+  overlay.innerHTML = '<span class="mystery-mark">★</span><span class="mystery-label">bonus round</span>';
+  overlay.addEventListener('click', openBonusQuiz);
+  frame.appendChild(overlay);
+
+  card.appendChild(frame);
+
+  const caption = document.createElement('figcaption');
+  if (result === 'correct') {
+    caption.textContent = BONUS_MOMENT.correctReveal;
+  } else if (result === 'wrong') {
+    caption.textContent = BONUS_MOMENT.wrongReveal;
+  } else {
+    caption.textContent = 'one shot only — choose wisely';
+  }
+  card.appendChild(caption);
+
+  return card;
+}
+
 function initGallery() {
   const grid = document.getElementById('gallery-grid');
   if (!grid) return;
@@ -237,6 +301,7 @@ function initGallery() {
   UPCOMING_MOMENTS.forEach((text) => {
     grid.appendChild(buildPlaceholderCard(text));
   });
+  grid.appendChild(buildBonusCard(getBonusResult()));
 }
 
 const modalOverlay = document.getElementById('modal-overlay');
@@ -341,6 +406,94 @@ function revealCardInGrid(index) {
   if (caption) caption.textContent = MOMENTS[index].caption;
 }
 
+function openBonusQuiz() {
+  const result = getBonusResult();
+  if (result) {
+    renderBonusResult(result);
+  } else {
+    renderBonusQuestion();
+  }
+  modalOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function renderBonusQuestion() {
+  modalBody.innerHTML = '';
+
+  const img = document.createElement('img');
+  img.src = BONUS_MOMENT.img;
+  img.alt = BONUS_MOMENT.alt;
+  img.className = 'modal-photo';
+  modalBody.appendChild(img);
+
+  const badge = document.createElement('p');
+  badge.className = 'modal-bonus-badge';
+  badge.textContent = 'BONUS ROUND — one attempt only, no take-backs';
+  modalBody.appendChild(badge);
+
+  const question = document.createElement('p');
+  question.className = 'modal-question';
+  question.textContent = BONUS_MOMENT.question;
+  modalBody.appendChild(question);
+
+  const optionsWrap = document.createElement('div');
+  optionsWrap.className = 'modal-options';
+
+  BONUS_MOMENT.options.forEach((optionText, optionIndex) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'modal-option';
+    btn.textContent = optionText;
+    btn.addEventListener('click', () => handleBonusAnswer(optionIndex, btn, optionsWrap));
+    optionsWrap.appendChild(btn);
+  });
+  modalBody.appendChild(optionsWrap);
+}
+
+function handleBonusAnswer(chosenIndex, btn, optionsWrap) {
+  const correct = chosenIndex === BONUS_MOMENT.answer;
+  const result = correct ? 'correct' : 'wrong';
+  setBonusResult(result);
+
+  Array.from(optionsWrap.children).forEach((b) => { b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'incorrect');
+
+  setTimeout(() => {
+    renderBonusResult(result);
+    updateBonusCardInGrid(result);
+  }, 700);
+}
+
+function renderBonusResult(result) {
+  modalBody.innerHTML = '';
+
+  const img = document.createElement('img');
+  img.src = BONUS_MOMENT.img;
+  img.alt = BONUS_MOMENT.alt;
+  img.className = 'modal-photo';
+  modalBody.appendChild(img);
+
+  const caption = document.createElement('p');
+  caption.className = 'modal-caption';
+  caption.textContent = result === 'correct' ? BONUS_MOMENT.correctReveal : BONUS_MOMENT.wrongReveal;
+  modalBody.appendChild(caption);
+
+  const continueBtn = document.createElement('button');
+  continueBtn.type = 'button';
+  continueBtn.className = 'reason-btn modal-continue';
+  continueBtn.textContent = 'Close';
+  continueBtn.addEventListener('click', closeModal);
+  modalBody.appendChild(continueBtn);
+}
+
+function updateBonusCardInGrid(result) {
+  const card = document.getElementById('bonus-card');
+  if (!card) return;
+  card.classList.add('solved');
+  const caption = card.querySelector('figcaption');
+  if (caption) caption.textContent = result === 'correct' ? BONUS_MOMENT.correctReveal : BONUS_MOMENT.wrongReveal;
+}
+
 modalCloseBtn.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (event) => {
   if (event.target === modalOverlay) closeModal();
@@ -355,6 +508,7 @@ if (devResetBtn) {
   devResetBtn.addEventListener('click', () => {
     try {
       localStorage.removeItem('mysterySolved');
+      localStorage.removeItem('bonusResult');
     } catch (e) {
       // ignore
     }

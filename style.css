@@ -364,6 +364,23 @@ main {
   margin: 0 0 1.5rem;
 }
 
+.modal-bonus-badge {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-style: italic;
+  margin: 0 0 0.75rem;
+}
+
+.bonus-card .mystery-overlay {
+  background: rgba(122, 59, 72, 0.35);
+}
+.bonus-card .mystery-mark {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
 .modal-options {
   display: flex;
   flex-direction: column;
