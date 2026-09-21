@@ -164,6 +164,15 @@ main {
   color: var(--cream);
 }
 
+.tab-btn.locked {
+  opacity: 0.55;
+  border-style: dashed;
+}
+.tab-btn.locked::after {
+  content: '🔒';
+  font-size: 0.8rem;
+}
+
 .tab-panel {
   display: none;
 }

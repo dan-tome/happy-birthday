@@ -49,7 +49,66 @@ function updateCountdown() {
 }
 
 updateCountdown();
-setInterval(updateCountdown, 1000);
+setInterval(() => {
+  updateCountdown();
+  refreshTabLocks();
+}, 1000);
+
+// ---- Tab locks ----
+// Fixed one-time unlock moments for this birthday (2026-09-22), not recurring —
+// once each passes, that tab stays unlocked forever after.
+const TAB_UNLOCKS = {
+  letter: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 0, 0, 0),
+  reasons: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 9, 0, 0),
+  moments: new Date(2026, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY, 14, 0, 0),
+};
+
+function isTabUnlocked(tabName) {
+  const unlockAt = TAB_UNLOCKS[tabName];
+  if (!unlockAt) return true; // no lock configured (e.g. home) — always open
+  return new Date() >= unlockAt;
+}
+
+function formatUnlockTime(date) {
+  const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const day = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+  return `${time} on ${day}`;
+}
+
+function refreshTabLocks() {
+  document.querySelectorAll('.tab-btn').forEach((btn) => {
+    const tab = btn.dataset.tab;
+    const locked = Boolean(TAB_UNLOCKS[tab]) && !isTabUnlocked(tab);
+    btn.classList.toggle('locked', locked);
+  });
+}
+
+function openLockedTabModal(tabName) {
+  const unlockAt = TAB_UNLOCKS[tabName];
+  modalBody.innerHTML = '';
+
+  const lock = document.createElement('p');
+  lock.className = 'modal-question';
+  lock.textContent = '🔒 Not yet!';
+  modalBody.appendChild(lock);
+
+  const hint = document.createElement('p');
+  hint.className = 'modal-feedback';
+  hint.textContent = tabName === 'letter'
+    ? "This unlocks the moment the countdown on Home reaches zero — that's midnight on your birthday."
+    : `This unlocks at ${formatUnlockTime(unlockAt)}.`;
+  modalBody.appendChild(hint);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'reason-btn modal-continue';
+  closeBtn.textContent = 'Close';
+  closeBtn.addEventListener('click', closeModal);
+  modalBody.appendChild(closeBtn);
+
+  modalOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
 
 // ---- Floating hearts ----
 function spawnHeart() {
@@ -578,5 +637,14 @@ function switchTab(tabName) {
 }
 
 document.querySelectorAll('.tab-btn').forEach((btn) => {
-  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    if (isTabUnlocked(tab)) {
+      switchTab(tab);
+    } else {
+      openLockedTabModal(tab);
+    }
+  });
 });
+
+refreshTabLocks();
