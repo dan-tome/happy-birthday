@@ -13,25 +13,32 @@
 
 <div id="hearts"></div>
 
-<header class="hero">
-  <p class="eyebrow">A little something for</p>
-  <h1 class="script">Ninette</h1>
-  <p class="subtitle">Happy Birthday, my love</p>
-
-  <div class="countdown" id="countdown">
-    <div class="time-box"><span id="days">00</span><small>days</small></div>
-    <div class="time-box"><span id="hours">00</span><small>hours</small></div>
-    <div class="time-box"><span id="minutes">00</span><small>minutes</small></div>
-    <div class="time-box"><span id="seconds">00</span><small>seconds</small></div>
-  </div>
-  <p class="countdown-caption" id="countdown-caption">until your day arrives</p>
-
-  <a href="#letter" class="scroll-cue">↓ scroll down ↓</a>
-</header>
+<nav class="tabnav" id="tabnav">
+  <button type="button" class="tab-btn active" data-tab="home">🏠 <span>Home</span></button>
+  <button type="button" class="tab-btn" data-tab="letter">💌 <span>Letter</span></button>
+  <button type="button" class="tab-btn" data-tab="moments">📸 <span>Moments</span></button>
+  <button type="button" class="tab-btn" data-tab="reasons">💗 <span>Reasons</span></button>
+</nav>
 
 <main>
 
-  <section id="letter" class="section letter-section">
+  <section id="home" class="tab-panel active">
+    <header class="hero">
+      <p class="eyebrow">A little something for</p>
+      <h1 class="script">Ninette</h1>
+      <p class="subtitle">Happy Birthday, my love</p>
+
+      <div class="countdown" id="countdown">
+        <div class="time-box"><span id="days">00</span><small>days</small></div>
+        <div class="time-box"><span id="hours">00</span><small>hours</small></div>
+        <div class="time-box"><span id="minutes">00</span><small>minutes</small></div>
+        <div class="time-box"><span id="seconds">00</span><small>seconds</small></div>
+      </div>
+      <p class="countdown-caption" id="countdown-caption">until your day arrives</p>
+    </header>
+  </section>
+
+  <section id="letter" class="tab-panel section letter-section">
     <h2 class="script section-title">A letter for you</h2>
     <div class="letter-card">
       <p>My dearest Ninette,</p>
@@ -54,7 +61,7 @@
     </div>
   </section>
 
-  <section id="gallery" class="section gallery-section">
+  <section id="moments" class="tab-panel section gallery-section">
     <div class="section-title-row">
       <h2 class="script section-title">Mystery Moments</h2>
       <button id="dev-reset-btn" class="dev-reset-btn" type="button">↺ Replay quiz (dev, remove later)</button>
@@ -65,7 +72,7 @@
     <div class="gallery-grid" id="gallery-grid"></div>
   </section>
 
-  <section id="reasons" class="section reasons-section">
+  <section id="reasons" class="tab-panel section reasons-section">
     <h2 class="script section-title">Reasons I love you</h2>
     <p class="section-hint">Click the button as many times as you'd like.</p>
 

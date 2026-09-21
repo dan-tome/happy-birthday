@@ -57,7 +57,7 @@ h1.script {
 .hero {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  min-height: calc(100vh - 5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -120,23 +120,60 @@ h1.script {
   color: var(--rose);
 }
 
-.scroll-cue {
-  position: absolute;
-  bottom: 2rem;
-  color: var(--rose);
-  text-decoration: none;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  animation: bob 2.2s ease-in-out infinite;
-}
-@keyframes bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
-}
-
 main {
   position: relative;
   z-index: 1;
+}
+
+/* Tab navigation */
+.tabnav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 250, 246, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--blush-deep);
+}
+
+.tab-btn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--blush-deep);
+  background: transparent;
+  color: var(--wine);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+.tab-btn:hover {
+  background: var(--blush);
+  transform: translateY(-1px);
+}
+.tab-btn.active {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: var(--cream);
+}
+
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+  animation: tab-fade-in 0.35s ease;
+}
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .section {
