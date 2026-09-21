@@ -293,6 +293,17 @@ main {
   line-height: 1.5;
 }
 
+.present-status {
+  margin-top: 1.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--blush);
+  border-radius: 12px;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--wine);
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
