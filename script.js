@@ -230,6 +230,12 @@ function closeModal() {
 function renderQuizQuestion(moment, index) {
   modalBody.innerHTML = '';
 
+  const img = document.createElement('img');
+  img.src = moment.img;
+  img.alt = moment.alt;
+  img.className = 'modal-photo';
+  modalBody.appendChild(img);
+
   const question = document.createElement('p');
   question.className = 'modal-question';
   question.id = 'modal-question';
