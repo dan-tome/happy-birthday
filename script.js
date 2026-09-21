@@ -28,12 +28,12 @@ let celebrationFired = false;
 function updateCountdown() {
   const caption = document.getElementById('countdown-caption');
   const countdownEl = document.getElementById('countdown');
-  const unlockedMsg = document.getElementById('unlocked-message');
+  const subtitle = document.getElementById('subtitle');
 
   if (isToday()) {
     countdownEl.style.display = 'none';
-    caption.textContent = "It's your day! Happy Birthday, Ninette! 🎉";
-    if (unlockedMsg) unlockedMsg.hidden = false;
+    if (subtitle) subtitle.textContent = 'Happy Birthday, Ninette! 🎉';
+    caption.textContent = 'The celebration starts now 🎉';
     if (!celebrationFired) {
       celebrationFired = true;
       fireConfetti();
@@ -41,7 +41,7 @@ function updateCountdown() {
     return;
   }
 
-  if (unlockedMsg) unlockedMsg.hidden = true;
+  if (subtitle) subtitle.textContent = 'Almost time, my love';
 
   const target = nextBirthday();
   const now = new Date();
@@ -86,6 +86,7 @@ updateCountdown();
 setInterval(() => {
   updateCountdown();
   refreshTabLocks();
+  renderLockStatus();
 }, 1000);
 
 // ---- Tab locks ----
@@ -107,6 +108,39 @@ function formatUnlockTime(date) {
   const time = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
   const day = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
   return `${time} on ${day}`;
+}
+
+function formatUnlockTimeShort(date) {
+  return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+// Home always shows the live locked/unlocked state of every gated tab.
+const TAB_LABELS = {
+  letter: { emoji: '💌', name: 'Letter' },
+  reasons: { emoji: '💗', name: 'Reasons' },
+  moments: { emoji: '📸', name: 'Moments' },
+};
+
+function renderLockStatus() {
+  const container = document.getElementById('lock-status');
+  if (!container) return;
+  container.innerHTML = '';
+
+  Object.keys(TAB_LABELS).forEach((tab) => {
+    const { emoji, name } = TAB_LABELS[tab];
+    const unlocked = isTabUnlocked(tab);
+    const row = document.createElement('p');
+    row.className = 'lock-status-item' + (unlocked ? ' unlocked' : '');
+
+    if (unlocked) {
+      row.textContent = `${emoji} ${name} — unlocked!`;
+    } else if (tab === 'letter') {
+      row.textContent = `🔒 ${name} — unlocks when the countdown hits zero`;
+    } else {
+      row.textContent = `🔒 ${name} — unlocks at ${formatUnlockTimeShort(TAB_UNLOCKS[tab])}`;
+    }
+    container.appendChild(row);
+  });
 }
 
 function refreshTabLocks() {
@@ -667,3 +701,4 @@ document.querySelectorAll('.tab-btn').forEach((btn) => {
 });
 
 refreshTabLocks();
+renderLockStatus();
