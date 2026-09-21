@@ -54,6 +54,32 @@ h1.script {
   100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
 }
 
+/* Confetti burst, fired once when the countdown hits zero */
+#confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  top: -5vh;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(600deg); opacity: 0.9; }
+}
+
+.unlocked-message {
+  margin-top: 1.25rem;
+  font-style: italic;
+  color: var(--wine);
+  font-weight: 600;
+}
+
 .hero {
   position: relative;
   z-index: 1;

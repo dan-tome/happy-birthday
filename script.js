@@ -23,15 +23,25 @@ function pad(n) {
   return String(n).padStart(2, '0');
 }
 
+let celebrationFired = false;
+
 function updateCountdown() {
   const caption = document.getElementById('countdown-caption');
   const countdownEl = document.getElementById('countdown');
+  const unlockedMsg = document.getElementById('unlocked-message');
 
   if (isToday()) {
     countdownEl.style.display = 'none';
     caption.textContent = "It's your day! Happy Birthday, Ninette! 🎉";
+    if (unlockedMsg) unlockedMsg.hidden = false;
+    if (!celebrationFired) {
+      celebrationFired = true;
+      fireConfetti();
+    }
     return;
   }
+
+  if (unlockedMsg) unlockedMsg.hidden = true;
 
   const target = nextBirthday();
   const now = new Date();
@@ -46,6 +56,30 @@ function updateCountdown() {
   document.getElementById('hours').textContent = pad(hours);
   document.getElementById('minutes').textContent = pad(minutes);
   document.getElementById('seconds').textContent = pad(seconds);
+}
+
+// ---- Confetti burst (fires once, the moment the countdown hits zero) ----
+const CONFETTI_COLORS = ['#c97b8a', '#cfa15a', '#7a3b48', '#f1c6cf', '#fffaf6'];
+
+function fireConfetti() {
+  const container = document.getElementById('confetti');
+  if (!container) return;
+
+  const pieceCount = 140;
+  for (let i = 0; i < pieceCount; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    piece.style.width = 6 + Math.random() * 6 + 'px';
+    piece.style.height = 10 + Math.random() * 8 + 'px';
+    const duration = 2.5 + Math.random() * 2.5;
+    const delay = Math.random() * 0.8;
+    piece.style.animationDuration = duration + 's';
+    piece.style.animationDelay = delay + 's';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+  }
 }
 
 updateCountdown();
