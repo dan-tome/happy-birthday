@@ -5,18 +5,31 @@ A little romantic birthday website for Ninette, built with plain HTML/CSS/JS
 
 ## What's here
 
-- `index.html` — page structure (hero countdown, love letter, photo gallery, reasons generator)
+- `index.html` — page structure (hero countdown, love letter, Mystery Moments gallery, reasons generator)
 - `style.css` — the romantic/elegant styling and animations
-- `script.js` — the countdown timer, floating hearts, and reasons generator
+- `script.js` — the countdown timer, floating hearts, Mystery Moments quiz, and reasons generator
 - `images/` — put your own photos here
 
 ## Customize it
 
 1. **The letter** — open `index.html`, find the `letter-card` section, and
    replace the placeholder text with your own words.
-2. **Photos** — drop image files into `images/`, then in `index.html` swap
-   each `<div class="placeholder">📷</div>` with
-   `<img src="images/your-photo.jpg" alt="...">` and update the captions.
+2. **Mystery Moments (the photo gallery)** — each photo is blurred behind a
+   tiny quiz question; answering correctly reveals it. Add a photo by
+   dropping the image into `images/`, then open `script.js` and add an
+   entry to the `MOMENTS` array at the top of the "Mystery Moments" section:
+   ```js
+   {
+     img: 'images/your-photo.jpg',
+     alt: 'Describe the photo for accessibility',
+     caption: 'The real caption, revealed after a correct answer',
+     question: 'A tiny question about the memory',
+     options: ['Wrong answer', 'Right answer', 'Another wrong answer'],
+     answer: 1, // index of the correct option above
+   },
+   ```
+   Photos without one yet stay listed in `UPCOMING_MOMENTS` as plain
+   placeholders (no quiz) until you're ready to add them.
 3. **Reasons I love you** — open `script.js` and edit the `REASONS` array
    with your own list. Add as many as you want.
 4. **Birthday date** — the countdown targets September 22 by default

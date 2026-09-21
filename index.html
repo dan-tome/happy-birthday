@@ -55,19 +55,11 @@
   </section>
 
   <section id="gallery" class="section gallery-section">
-    <h2 class="script section-title">Us, in pictures</h2>
+    <h2 class="script section-title">Mystery Moments</h2>
     <p class="section-hint">
-      Add your own photos to the <code>images/</code> folder and update the
-      <code>src</code> attributes below to replace these placeholders.
+      Tap a moment, answer the tiny quiz, and the memory unblurs itself.
     </p>
-    <div class="gallery-grid">
-      <figure class="polaroid"><img src="images/valencia-dinner.webp" alt="Ninette at a lovely restaurant in Valencia"><figcaption>Valencia — her food showed up fashionably late, mine showed up cold and gave up</figcaption></figure>
-      <figure class="polaroid"><img src="images/cliffs-of-moher.webp" alt="Us at the Cliffs of Moher, Ireland"><figcaption>Cliffs of Moher, Ireland</figcaption></figure>
-      <figure class="polaroid"><img src="images/galway-girl.webp" alt="Ninette sitting next to the Galway Girl statue in Galway"><figcaption>turns out Ed wrote "Galway Girl" about the wrong one</figcaption></figure>
-      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>a perfect ordinary day</figcaption></figure>
-      <figure class="polaroid"><img src="images/go-ape.webp" alt="Us at the Go Ape Treetop Challenge"><figcaption>#SmashedIt the Go Ape treetop course — right after a pack of eight-year-olds lapped us</figcaption></figure>
-      <figure class="polaroid"><div class="placeholder">📷</div><figcaption>us, always</figcaption></figure>
-    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </section>
 
   <section id="reasons" class="section reasons-section">
@@ -87,6 +79,13 @@
 <footer class="footer">
   <p>Made with love, just for you.</p>
 </footer>
+
+<div class="modal-overlay" id="modal-overlay" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-question">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

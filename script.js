@@ -102,3 +102,218 @@ function showReason() {
 }
 
 document.getElementById('reason-btn').addEventListener('click', showReason);
+
+// ---- Mystery Moments ----
+// Add a new moment by adding an entry here, with a matching photo in images/.
+// "answer" is the index (starting at 0) of the correct entry in "options".
+const MOMENTS = [
+  {
+    img: 'images/valencia-dinner.webp',
+    alt: 'Ninette at a lovely restaurant in Valencia',
+    caption: 'Valencia — her food showed up fashionably late, mine showed up cold and gave up',
+    question: 'Which city were we eating dinner in?',
+    options: ['Seville', 'Barcelona', 'Valencia'],
+    answer: 2,
+  },
+  {
+    img: 'images/cliffs-of-moher.webp',
+    alt: 'Us at the Cliffs of Moher, Ireland',
+    caption: 'Cliffs of Moher, Ireland',
+    question: 'Which country are these cliffs in?',
+    options: ['Scotland', 'Ireland', 'Portugal'],
+    answer: 1,
+  },
+  {
+    img: 'images/galway-girl.webp',
+    alt: 'Ninette sitting next to the Galway Girl statue in Galway',
+    caption: 'turns out Ed wrote "Galway Girl" about the wrong one',
+    question: 'Which Ed Sheeran song does this statue reference?',
+    options: ['Photograph', 'Perfect', 'Galway Girl'],
+    answer: 2,
+  },
+  {
+    img: 'images/go-ape.webp',
+    alt: 'Us at the Go Ape Treetop Challenge',
+    caption: '#SmashedIt the Go Ape treetop course — right after a pack of eight-year-olds lapped us',
+    question: 'What was the name of the treetop adventure course?',
+    options: ['Tree Top Trek', 'Go Ape', 'Canopy Climb'],
+    answer: 1,
+  },
+];
+
+// Moments without a photo yet — shown as plain placeholders, no quiz.
+const UPCOMING_MOMENTS = ['a perfect ordinary day', 'us, always'];
+
+function getSolvedMoments() {
+  try {
+    const raw = localStorage.getItem('mysterySolved');
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function markMomentSolved(index) {
+  try {
+    const solved = getSolvedMoments();
+    solved.add(index);
+    localStorage.setItem('mysterySolved', JSON.stringify([...solved]));
+  } catch (e) {
+    // ignore — solved state just won't persist across visits
+  }
+}
+
+function buildMysteryCard(moment, index, solved) {
+  const card = document.createElement('figure');
+  card.className = 'polaroid mystery-card' + (solved ? ' solved' : '');
+
+  const frame = document.createElement('div');
+  frame.className = 'mystery-frame';
+
+  const img = document.createElement('img');
+  img.src = moment.img;
+  img.alt = moment.alt;
+  frame.appendChild(img);
+
+  const overlay = document.createElement('button');
+  overlay.type = 'button';
+  overlay.className = 'mystery-overlay';
+  overlay.setAttribute('aria-label', 'Answer a quick quiz to reveal this memory');
+  overlay.innerHTML = '<span class="mystery-mark">?</span><span class="mystery-label">tap to unlock</span>';
+  overlay.addEventListener('click', () => openQuiz(index));
+  frame.appendChild(overlay);
+
+  card.appendChild(frame);
+
+  const caption = document.createElement('figcaption');
+  caption.textContent = solved ? moment.caption : 'a mystery moment';
+  card.appendChild(caption);
+
+  return card;
+}
+
+function buildPlaceholderCard(text) {
+  const card = document.createElement('figure');
+  card.className = 'polaroid';
+  card.innerHTML = `<div class="placeholder">📷</div><figcaption>${text}</figcaption>`;
+  return card;
+}
+
+function initGallery() {
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+  const solved = getSolvedMoments();
+
+  MOMENTS.forEach((moment, index) => {
+    grid.appendChild(buildMysteryCard(moment, index, solved.has(index)));
+  });
+  UPCOMING_MOMENTS.forEach((text) => {
+    grid.appendChild(buildPlaceholderCard(text));
+  });
+}
+
+const modalOverlay = document.getElementById('modal-overlay');
+const modalBody = document.getElementById('modal-body');
+const modalCloseBtn = document.getElementById('modal-close');
+
+function openQuiz(index) {
+  renderQuizQuestion(MOMENTS[index], index);
+  modalOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.hidden = true;
+  document.body.style.overflow = '';
+}
+
+function renderQuizQuestion(moment, index) {
+  modalBody.innerHTML = '';
+
+  const question = document.createElement('p');
+  question.className = 'modal-question';
+  question.id = 'modal-question';
+  question.textContent = moment.question;
+  modalBody.appendChild(question);
+
+  const optionsWrap = document.createElement('div');
+  optionsWrap.className = 'modal-options';
+
+  moment.options.forEach((optionText, optionIndex) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'modal-option';
+    btn.textContent = optionText;
+    btn.addEventListener('click', () => handleQuizAnswer(moment, index, optionIndex, btn, optionsWrap));
+    optionsWrap.appendChild(btn);
+  });
+  modalBody.appendChild(optionsWrap);
+
+  const feedback = document.createElement('p');
+  feedback.className = 'modal-feedback';
+  feedback.id = 'modal-feedback';
+  modalBody.appendChild(feedback);
+}
+
+function handleQuizAnswer(moment, index, chosenIndex, btn, optionsWrap) {
+  const feedback = document.getElementById('modal-feedback');
+
+  if (chosenIndex === moment.answer) {
+    markMomentSolved(index);
+    Array.from(optionsWrap.children).forEach((b) => { b.disabled = true; });
+    btn.classList.add('correct');
+    feedback.textContent = 'Got it 💗';
+    feedback.classList.add('correct');
+    setTimeout(() => renderQuizReveal(moment, index), 600);
+  } else {
+    btn.classList.remove('incorrect');
+    void btn.offsetWidth; // restart the shake animation
+    btn.classList.add('incorrect');
+    feedback.textContent = 'Not quite — try again';
+    feedback.classList.remove('correct');
+  }
+}
+
+function renderQuizReveal(moment, index) {
+  modalBody.innerHTML = '';
+
+  const img = document.createElement('img');
+  img.src = moment.img;
+  img.alt = moment.alt;
+  img.className = 'modal-photo';
+  modalBody.appendChild(img);
+
+  const caption = document.createElement('p');
+  caption.className = 'modal-caption';
+  caption.textContent = moment.caption;
+  modalBody.appendChild(caption);
+
+  const continueBtn = document.createElement('button');
+  continueBtn.type = 'button';
+  continueBtn.className = 'reason-btn modal-continue';
+  continueBtn.textContent = 'Continue';
+  continueBtn.addEventListener('click', () => {
+    closeModal();
+    revealCardInGrid(index);
+  });
+  modalBody.appendChild(continueBtn);
+}
+
+function revealCardInGrid(index) {
+  const grid = document.getElementById('gallery-grid');
+  const card = grid.children[index];
+  if (!card) return;
+  card.classList.add('solved');
+  const caption = card.querySelector('figcaption');
+  if (caption) caption.textContent = MOMENTS[index].caption;
+}
+
+modalCloseBtn.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (event) => {
+  if (event.target === modalOverlay) closeModal();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !modalOverlay.hidden) closeModal();
+});
+
+initGallery();
